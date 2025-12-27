@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение на ДР</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .card {
+      width: 90vmin;
+      aspect-ratio: 3 / 4;
+      max-width: 450px;
+      max-height: 600px;
+      
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(6px);
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before,
+    .card::after {
+      content: "✨";
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: float 6s infinite ease-in-out;
+    }
+    .card::before { top: 20px; left: 30px; animation-delay: 0s; }
+    .card::after { bottom: 25px; right: 35px; animation-delay: 2s; }
+
+    .line {
+      font-size: 1.65em;
+      font-weight: 600;
+      margin: 12px 0;
+      line-height: 1.3;
+      color: #5a5a5a;
+      opacity: 0;
+      animation: fadeInUp 0.7s forwards;
+    }
+
+    .line:nth-child(1) { animation-delay: 0.2s; }
+    .line:nth-child(2) { animation-delay: 0.4s; }
+    .line:nth-child(3) { animation-delay: 0.6s; }
+    .line:nth-child(4) { animation-delay: 0.8s; }
+
+    /* Поле ввода */
+    .input-line {
+      animation-delay: 1.0s !important;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #nameInput {
+      font-size: 1.2em;
+      padding: 8px 12px;
+      border: 2px dashed #e91e63;
+      border-radius: 12px;
+      outline: none;
+      text-align: center;
+      width: 100%;
+      max-width: 180px;
+      background: #fff9f9;
+      color: #e91e63;
+      font-weight: 600;
+    }
+
+    #confirmBtn {
+      background: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 24px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    #confirmBtn:hover {
+      background: #d81b60;
+      transform: scale(1.03);
+    }
+
+    #confirmBtn:active {
+      transform: scale(0.98);
+    }
+
+    #confirmation {
+      font-size: 1.3em;
+      color: #2e7d32;
+      font-weight: 600;
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 320px) {
+      .line { font-size: 1.4em; }
+      #nameInput { font-size: 1.1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="line">Подарки, веселье и торт!</div>
+    <div class="line">А главное — ты!</div>
+    <div class="line">Приходи на мой день рождения</div>
+    <div class="line">Метро Трубная, 13:40</div>
+    
+    <div class="line input-line">
+      <label for="nameInput">Кого ждать?</label>
+      <input type="text" id="nameInput" placeholder="Твоё имя" maxlength="20">
+      <button id="confirmBtn">Я приду!</button>
+    </div>
+
+    <div id="confirmation">Отлично! Жду тебя! 🎉</div>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById('nameInput');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const confirmation = document.getElementById('confirmation');
+
+    // Загружаем сохранённое имя при открытии
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('birthdayGuestName');
+      if (savedName) {
+        nameInput.value = savedName;
+        showConfirmation();
+      }
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      if (name) {
+        localStorage.setItem('birthdayGuestName', name);
+        showConfirmation();
+      } else {
+        nameInput.focus();
+        nameInput.placeholder = 'Напиши имя!';
+      }
+    });
+
+    nameInput.addEventListener('input', () => {
+      // Сбрасываем подтверждение, если меняется имя
+      confirmation.style.opacity = '0';
+    });
+
+    function showConfirmation() {
+      confirmation.style.opacity = '1';
+    }
+  </script>
+</body>
+</html>
